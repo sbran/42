@@ -14,7 +14,8 @@ NAME = grimly
 
 SRC = grimly.c\
 	ft_lib.c\
-	ft_labyrinthe.c
+	ft_labyrinthe.c\
+	ft_coord.c
 
 FLAGS = -Wall -Werror -Wextra
 

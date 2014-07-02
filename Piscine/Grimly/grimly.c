@@ -80,7 +80,7 @@ char	*ft_init_arg(t_infos *infos)
 	return (buff);
 }
 
-char	**ft_read(int ac, char **av, t_infos infos)
+char	**ft_read(int ac, char **av, t_infos *infos)
 {
 	char	buff;
 	char	**map;
@@ -91,11 +91,12 @@ char	**ft_read(int ac, char **av, t_infos infos)
 	i = 0;
 	map = NULL;
 	fd = open(av[1], O_RDONLY);
-	map = ft_malloc(map, infos.line, infos.col);
+	map = ft_malloc(map, infos->line, infos->col);
 	ac < 2 ? fd = 0 : fd;
 	j = 0;
 	while ((read(fd, &buff, 1)) > 0)
 	{
+		ft_init_coord(infos, buff, i, j);		
 		map[i][j++] = buff;
 		if (buff == '\n')
 		{
@@ -120,7 +121,7 @@ int		main(int ac, char **av)
 		fd = open(av[1], O_RDONLY);
 		check_size(ft_init_arg_file(fd, &infos), &infos);
 	}
-	map = ft_read(ac, av, infos);
-	ft_labyrinthe(&map[1], infos);
+	map = ft_read(ac, av, &infos);
+	ft_labyrinthe(&map[1], &infos);
 	return (0);
 }

@@ -39,42 +39,56 @@ int			ft_check_exit(char **map, t_infos infos, int i, int j)
 
 char		**ft_search_path(char **map, int i, int j, t_infos *infos)
 {
-	if (!ft_check_exit(map, *infos, i, j))
+	int		diff_i;
+	int		diff_j;
+
+	if (infos->enter_i >= infos->exit_i)
+		diff_i = infos->enter_i - infos->exit_i;
+	else
+		diff_i = infos->exit_i - infos->enter_i;
+	if (infos->enter_j >= infos->exit_j)
+		diff_j = infos->enter_j - infos->exit_j;
+	else
+		diff_j = infos->exit_j - infos->enter_j;
+	//printf("diff_i = %d\tdiff j = %d\nenter j = %d\texit j = %d\n\n", diff_i, diff_j, infos->enter_j, infos->exit_j);
+	if (diff_i <= diff_j)
 	{
-		map[i][j] = infos->empty;
+		if (infos->enter_j <= infos->exit_j)
+		{
+			map = ft_right(map, i, j, infos);
+		}
+		else
+			map = ft_left(map, i, j, infos);
 	}
 	else
 	{
-		map[i][j] = infos->path;
-		ft_print_map(map, *infos, 0);
+		if (infos->enter_i <= infos->exit_i)
+		{
+			map = ft_down(map, i, j, infos);
+		}
+		else
+			map = ft_up(map, i, j, infos);
 	}
-	infos->ln_path++;
-	if (map[i][j] != infos->enter)
-		map[i][j] = infos->path;
-	if (j < ft_strlen(map[2]) && map[i][j + 1] == infos->empty)
-		map = ft_search_path(map, i, (j + 1), infos);
-	if (i > 0 && map[i - 1][j] == infos->empty)
-		map = ft_search_path(map, (i - 1), j, infos);
-	if (map[i + 1][j] == infos->empty)
-		map = ft_search_path(map, (i + 1), j, infos);
-	if (j > 0 && map[i][j - 1] == infos->empty)
-		map = ft_search_path(map, i, (j - 1), infos);
 	return (map);
 }
 
-void		ft_labyrinthe(char **map, t_infos infos)
+void		ft_labyrinthe(char **map, t_infos *infos)
 {
 	int		i;
 	int		j;
 
 	i = 0;
-	while (i <= infos.col)
+	//ft_putendl("test");
+	while (i <= infos->col)
 	{
+		//ft_putendl("\ntest WHILE");
 		j = 0;
 		while (map[i][j] != '\0')
 		{
-			if (map[i][j] == infos.enter)
-				map = ft_search_path(map, i, j, &infos);
+			//printf("i = %d\tj = %d\n", i, j);
+			//ft_putendl("test WHILE LINE");
+			if (map[i][j] == infos->enter)
+				map = ft_search_path(map, i, j, infos);
 			j++;
 		}
 		i++;
